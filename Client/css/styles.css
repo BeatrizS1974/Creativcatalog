@@ -1,0 +1,22 @@
+html {
+    background-color: rgb(219, 233, 238);
+    font-family: Verdana, Geneva, Arial, sans-serif; 	
+ }
+ 
+ body {
+    background-color: rgb(179, 222, 251);  
+ }
+ /* Navigation styles */
+nav {
+    /* Ensure the navigation is displayed as a horizontal flex container */
+    display:inline-flexbox;
+    justify-content:space-between;
+    align-items: center;
+    background-color: #fff; /* Background color for the navigation */
+    padding: 10px; /* Add padding to the navigation */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  
+ 
+  
