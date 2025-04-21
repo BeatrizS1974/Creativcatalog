@@ -24,8 +24,8 @@ app.use(session({
 
 // MongoDB Connection
 mongoose.connect('mongodb://localhost:27017/creativCatalog')
-  .then(() => console.log(' MongoDB connected'))
-  .catch(err => console.error(' MongoDB error:', err));
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB error:', err));
 
 // Mongoose Schema
 const userSchema = new mongoose.Schema({
@@ -38,8 +38,6 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 // Routes
-
-// Default route → Dashboard.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'Client', 'Dashboard.html'));
 });
@@ -91,9 +89,6 @@ app.post('/login', async (req, res) => {
 
     // Save session info
     req.session.user = { id: user._id, email: user.email };
-
-    // Save session info
-    req.session.user = { id: user._id, email: user.email };
     res.json({ success: true, message: 'Login successful!' });
 
   } catch (err) {
@@ -117,7 +112,12 @@ app.get('/logout', (req, res) => {
   });
 });
 
+// ✅ Mount product-related services
+const { services, initializeDatabase } = require('./services');
+services(app);
+initializeDatabase();
+
 // Start Server
 app.listen(PORT, () => {
-  console.log(` Server running: http://localhost:${PORT}`);
+  console.log(`Server running: http://localhost:${PORT}`);
 });

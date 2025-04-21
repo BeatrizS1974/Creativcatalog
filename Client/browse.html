@@ -15,7 +15,14 @@
   <header>
     <h1>Browse Catalog</h1>
   </header>
-
+  <nav>
+    <ul class="nav-buttons">
+      <li><a href="/landing.html">Home</a></li>
+      <li><a href="/add_products.html">Add Product</a></li>
+      <li><a href="/browse.html">Browse Catalog</a></li>
+      <li><a href="/wishlist.html">Wishlist</a></li>
+    </ul>
+  </nav>
   <main>
     <table>
       <thead>
@@ -30,17 +37,48 @@
         </tr>
       </thead>
       <tbody>
+        <div style="margin-bottom: 20px; text-align: center;">
+          <label for="filterType">Filter by Type:</label>
+          <select id="filterType" ng-model="selectedType" ng-change="filterByType()">
+            <option value="">-- All Types --</option>
+            <option ng-repeat="type in uniqueTypes">{{type}}</option>
+          </select>
+        </div>
+        
         <tr ng-repeat="item in products">
-          <td>{{item.name}}</td>
-          <td>{{item.manufacturer}}</td>
-          <td>{{item.type}}</td>
-          <td>{{item.color}}</td>
-          <td>{{item.location}}</td>
-          <td>{{item.quantity}}</td>
-          <td>
-            <button ng-click="editProduct(item)">Edit</button>
-            <button ng-click="deleteProduct(item)">Delete</button>
-          </td>
+          <tr ng-repeat="item in products">
+            <td>
+              <span ng-if="editing !== item._id">{{item.name}}</span>
+              <input ng-if="editing === item._id" ng-model="updatedProduct.name" />
+            </td>
+            <td>
+              <span ng-if="editing !== item._id">{{item.manufacturer}}</span>
+              <input ng-if="editing === item._id" ng-model="updatedProduct.manufacturer" />
+            </td>
+            <td>
+              <span ng-if="editing !== item._id">{{item.type}}</span>
+              <input ng-if="editing === item._id" ng-model="updatedProduct.type" />
+            </td>
+            <td>
+              <span ng-if="editing !== item._id">{{item.color}}</span>
+              <input ng-if="editing === item._id" ng-model="updatedProduct.color" />
+            </td>
+            <td>
+              <span ng-if="editing !== item._id">{{item.location}}</span>
+              <input ng-if="editing === item._id" ng-model="updatedProduct.location" />
+            </td>
+            <td>
+              <span ng-if="editing !== item._id">{{item.quantity}}</span>
+              <input type="number" ng-if="editing === item._id" ng-model="updatedProduct.quantity" />
+            </td>
+            <td>
+              <button ng-if="editing !== item._id" ng-click="editProduct(item)">Edit</button>
+              <button ng-if="editing !== item._id" ng-click="deleteProduct(item)">Delete</button>
+              <button ng-if="editing === item._id" ng-click="saveProduct()">Save</button>
+              <button ng-if="editing === item._id" ng-click="cancelEdit()">Cancel</button>
+            </td>
+          </tr>
+          
         </tr>
       </tbody>
     </table>

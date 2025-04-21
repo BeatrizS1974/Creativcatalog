@@ -6,6 +6,7 @@ var app= angular.module("addProductApp", [])
         if($scope.name === "" || $scope.manufacturer== "" || $scope.type == "" ||
              $scope.color == "" || $scope.location == "" || $scope.quantity == "" ){
         return;
+        console.log(dog);
         }
         $http({
             method: "post",
@@ -17,7 +18,9 @@ var app= angular.module("addProductApp", [])
                 color: $scope.color,
                 location: $scope.location,
                 quantity: $scope.quantity
+                
             }
+            
 
         }).then(function(response){
             if(response.data.msg === "SUCCESS"){
