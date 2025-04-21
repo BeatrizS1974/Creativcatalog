@@ -1,4 +1,6 @@
 const path = require('path');
+const bcrypt = require('bcrypt');
+const { services } = require('./services.js');
 
 //Page Listener(router)
 var router = function(app) {
@@ -7,8 +9,8 @@ app.get("/", function(req, res){
     res.status(200).sendFile(path.join(__dirname + "/../Client/login.html"));
 });
 
-app.get("/dashboard", function(req, res){
-    res.status(200).sendFile(path.join(__dirname + "/../Client/dashboard.html"));
+app.get("/Dashboard", function(req, res){
+    res.status(200).sendFile(path.join(__dirname + "/../Client/Dashboard.html"));
 });
 
 app.get("/add_products", function(req, res){

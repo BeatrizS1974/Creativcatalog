@@ -1,23 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href='/Client/css/styles.css'>
-    
-    <title>Creativcatalog</title>
 
+<!DOCTYPE html>
+<html lang="en" ng-app="browseApp" ng-controller="browseCtrl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <title>Browse Products - CreativCatalog</title>
+ 
+  <link rel="stylesheet" href="css/browse.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="js/browse.js"></script>
 </head>
 <body>
-    <header>
-        <h1>CreativCatalog</h1>
-        <nav>
-            <ul class="nav-buttons">
-                <a href="/home">Home</a>
-                <a href="/add_products">Add Product</a>
-                <a href="/browse">Browse Catalog</a>
-                <a href="/wishlist">Wishlist</a>
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <h1>Browse Catalog</h1>
+  </header>
+
+  <main>
+    <table>
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Manufacturer</th>
+          <th>Type</th>
+          <th>Color</th>
+          <th>Location</th>
+          <th>Quantity</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in products">
+          <td>{{item.name}}</td>
+          <td>{{item.manufacturer}}</td>
+          <td>{{item.type}}</td>
+          <td>{{item.color}}</td>
+          <td>{{item.location}}</td>
+          <td>{{item.quantity}}</td>
+          <td>
+            <button ng-click="editProduct(item)">Edit</button>
+            <button ng-click="deleteProduct(item)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

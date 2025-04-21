@@ -1,60 +1,123 @@
 const express = require('express');
-const app = express();
 const path = require('path');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bcrypt = require('bcrypt');
+const session = require('express-session');
 
-app.use(express.static(path.join(__dirname, '../Client'))); 
+const app = express();
+const PORT = 5000;
 
-var cors = require('cors')
+// Middleware
 app.use(cors());
-
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, '../Client')));
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/userLog');
+app.use(session({
+  secret: 'creativSecretKey',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
+}));
 
-const UserSchema = new mongoose.Schema({
-    email: String,
-    firstName: String,
-    lastName: String,
-    phone: String,
-    password: String
+// MongoDB Connection
+mongoose.connect('mongodb://localhost:27017/creativCatalog')
+  .then(() => console.log(' MongoDB connected'))
+  .catch(err => console.error(' MongoDB error:', err));
+
+// Mongoose Schema
+const userSchema = new mongoose.Schema({
+  firstName: String,
+  lastName: String,
+  email: String,
+  phone: String,
+  password: String
+});
+const User = mongoose.model('User', userSchema);
+
+// Routes
+
+// Default route → Dashboard.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'Client', 'Dashboard.html'));
 });
 
-const User = mongoose.model('User', UserSchema);
-
-// Create account endpoint
+// Create Account
 app.post('/create-account', async (req, res) => {
-    try {
-        const { email, firstName, lastName, phone, password } = req.body;
-        const newUser = new User({ email, firstName, lastName, phone, password });
-        await newUser.save();
-        res.json({ success: true, message: 'Account created successfully!' });
-    } catch (error) {
-        res.json({ success: false, message: 'Error creating account', error });
+  try {
+    let { firstName, lastName, email, phone, password } = req.body;
+
+    if (!firstName || !lastName || !email || !phone || !password) {
+      return res.status(400).json({ success: false, message: 'All fields required.' });
     }
+
+    email = email.toLowerCase();
+    const existing = await User.findOne({ email });
+    if (existing) {
+      return res.json({ success: false, message: 'User already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ firstName, lastName, email, phone, password: hashedPassword });
+    await newUser.save();
+
+    res.json({ success: true, message: 'Account created successfully!' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
 });
 
-
-
-const router = require("./router");
-router(app);
-
-//define the server
-var server;
-var port = process.env.PORT || process.env.NODE_PORT || 5000
-
-//Service listeners
-var services = require("./services.js");
-services.services(app);
-//*services.initializeDatabase();
-
-//Start server and listen
-server = app.listen(port, function(err) {
-    if (err) {
-      throw err;
+// Login
+app.post('/login', async (req, res) => {
+  try {
+    let { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: 'Missing credentials' });
     }
-    console.log("Listening on port " + port);
+
+    email = email.toLowerCase();
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({ success: false, message: 'User not found' });
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.json({ success: false, message: 'Incorrect password' });
+    }
+
+    // Save session info
+    req.session.user = { id: user._id, email: user.email };
+
+    // Save session info
+    req.session.user = { id: user._id, email: user.email };
+    res.json({ success: true, message: 'Login successful!' });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Protected Landing Page
+app.get('/landing.html', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/');
+  }
+  res.sendFile(path.join(__dirname, '..', 'Client', 'landing.html'));
+});
+
+// Logout
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
+});
+
+// Start Server
+app.listen(PORT, () => {
+  console.log(` Server running: http://localhost:${PORT}`);
 });

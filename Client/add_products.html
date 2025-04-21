@@ -1,24 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ng-app="addProductApp" data-ng-controller="addProductCtrl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href='/Client/css/styles.css'>
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="./js/config.js"></script>
+    <script src="./js/add_products.js"></script>
+    <link rel="stylesheet" href="/css/add_products.css">
+
     <title>Creativcatalog</title>
 
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>CreativCatalog</h1>
         <nav>
             <ul class="nav-buttons">
-                <a href="/home">Home</a>
-                <a href="/add_products">Add Product</a>
-                <a href="/browse">Browse Catalog</a>
-                <a href="/wishlist">Wishlist</a>
+                <a href="/landing.html">Home</a>
+                <a href="/browse.html">Browse Catalog</a>
+                <a href="/wishlist.html">Wishlist</a>
             </ul>
         </nav>
     </header>
-</body>
+
+<main style="font-size: 20px; padding: 20px;">
+    <div>
+        <label for="name">Product Name:</label>
+        <input type="text" id="name" data-ng-model="name">
+    </div>
+
+    <div>
+        <label for="manufacturer">Manufacturer:</label>
+        <input type="text" id="manufacturer" data-ng-model="manufacturer">
+    </div>
+
+    <div>
+        <label for="type">Type:</label>
+        <input type="text" id="type" data-ng-model="type">
+    </div>
+
+    <div>
+        <label for="color">Color:</label>
+        <input type="text" id="color" data-ng-model="color">
+    </div>
+
+
+    <div>
+        <label for="location">Location:</label>
+        <input type="text" id="location" data-ng-model="location">
+    </div>
+        
+    <div>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" data-ng-model="quantity">
+    </div>
+        
+    <div>
+        <button ng-click="submitProduct()">Add Product</button>
+    </div>
+        
+     <p>{{addResults}}</p>
+        
