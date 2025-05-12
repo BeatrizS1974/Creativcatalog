@@ -1,68 +1,233 @@
 <!DOCTYPE html>
 <html lang="en" data-ng-app="addProductApp" data-ng-controller="addProductCtrl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    <script src="./js/config.js"></script>
-    <script src="./js/add_products.js"></script>
-    <link rel="stylesheet" href="/css/add_products.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CreativCatalog - Add Products</title>
 
-    <title>Creativcatalog</title>
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/add_products.css" />
 
-    <style>
-        table, th, td {
-            border: 1px solid black;
-        }
-    </style>
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+  <!-- JavaScript -->
+  <script src="/js/config.js"></script>
+  <script src="/js/add_products.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 </head>
+
 <body>
-    <header>
-        <h1>CreativCatalog</h1>
-        <nav>
-            <ul class="nav-buttons">
-                <a href="/landing.html">Home</a>
-                <a href="/browse.html">Browse Catalog</a>
-                <a href="/wishlist.html">Wishlist</a>
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <h1>CreativCatalog</h1>
+    <nav>
+  <ul class="nav-buttons">
+    <li><a href="/landing.html">Home</a></li>
+    <li><a href="/add_products.html">Add Product</a></li>
+    <li><a href="/browse.html">Browse Catalog</a></li>
+    <li><a href="/wishlist.html">Wishlist</a></li>
+    <li><a href="/projects.html">Projects</a></li>
+    <li><a href="#" id="logout-link">Log Out</a></li>
+  </ul>
+</nav>
 
-<main style="font-size: 20px; padding: 20px;">
-    <div>
-        <label for="name">Product Name:</label>
-        <input type="text" id="name" data-ng-model="name">
-    </div>
+  </header>
 
-    <div>
-        <label for="manufacturer">Manufacturer:</label>
-        <input type="text" id="manufacturer" data-ng-model="manufacturer">
-    </div>
+  <main>
+    
 
+    <!-- Add Product Form -->
     <div>
-        <label for="type">Type:</label>
-        <input type="text" id="type" data-ng-model="type">
+      <label for="name">Product Name:</label>
+      <input type="text" id="name" data-ng-model="name">
     </div>
 
     <div>
-        <label for="color">Color:</label>
-        <input type="text" id="color" data-ng-model="color">
+      <label for="manufacturer">Manufacturer:</label>
+      <input type="text" id="manufacturer" data-ng-model="manufacturer">
     </div>
 
+    <div>
+      <label for="type">Type:</label>
+      <input type="text" id="type" data-ng-model="type">
+    </div>
 
     <div>
-        <label for="location">Location:</label>
-        <input type="text" id="location" data-ng-model="location">
+      <label for="color">Color:</label>
+      <input type="text" id="color" data-ng-model="color">
     </div>
-        
+
     <div>
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" data-ng-model="quantity">
+      <label for="location">Location:</label>
+      <input type="text" id="location" data-ng-model="location">
     </div>
-        
+
     <div>
-        <button ng-click="submitProduct()">Add Product</button>
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" data-ng-model="quantity">
     </div>
-        
-     <p>{{addResults}}</p>
-        
+
+    <div class="button-group">
+      <button data-ng-click="submitProduct()">Add Product</button>
+      <!-- <button id="scan-upc-btn">Scan UPC</button> -->
+      <!-- <button id="start-scan-btn" style="display: none;">Start Scanning</button> -->
+    </div>
+
+   <script src="/js/logout.js"></script>
+
+ 
+</script>
+</body>
+</html>
+
+    <!-- Scanner View -->
+    <!-- <div class="scanner-container">
+      <video id="scanner" width="300" height="200" style="display: none;"></video>
+    </div> -->
+
+    <!-- Loading -->
+    <!-- <div id="loading-spinner" style="display: none; text-align: center; margin-top: 20px;">
+      <p>Loading Product Info...</p>
+      <div class="spinner"></div>
+    </div>
+  </main> -->
+
+  <!-- QR Code Modal -->
+  <!-- <div id="qrModal" class="modal"> -->
+    <!-- <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>Scan This QR Code to Connect</h3>
+      <canvas id="qr-code"></canvas>
+    </div> -->
+ 
+
+  <!-- Page-specific script block -->
+ 
+   <!-- 
+
+    // QR setup
+    // const qr = new QRious({
+    //   element: document.getElementById('qr-code'),
+    //   value: indexURL + '/add_products',
+    //   size: 200,
+    //   background: 'white',
+    //   foreground: 'black'
+    // });
+
+    // const modal = document.getElementById("qrModal");
+    // const btn = document.getElementById("scan-upc-btn");
+    // const startBtn = document.getElementById("start-scan-btn");
+    // const span = document.getElementById("closeModal");
+
+    // btn.onclick = function () {
+    //   modal.style.display = "block";
+    // };
+
+    // span.onclick = function () {
+    //   modal.style.display = "none";
+    //   startBtn.style.display = "inline-block";
+    // };
+
+    // window.onclick = function (event) {
+    //   if (event.target == modal) {
+    //     modal.style.display = "none";
+    //     startBtn.style.display = "inline-block";
+    //   }
+    // };
+
+    // startBtn.onclick = function () {
+    //   const scannerElement = document.getElementById('scanner');
+    //   scannerElement.style.display = 'block';
+
+    //   Quagga.init({
+    //     inputStream: {
+    //       name: "Live",
+    //       type: "LiveStream",
+    //       target: scannerElement,
+    //       constraints: { facingMode: "environment" }
+    //     },
+    //     decoder: {
+    //       readers: ["upc_reader", "ean_reader"]
+    //     }
+    //   }, function (err) {
+    //     if (err) {
+    //       console.error(err);
+    //       alert('Error initializing scanner: ' + err);
+    //       return;
+    //     }
+    //     Quagga.start();
+    //   });
+
+    //   Quagga.onDetected(function (result) {
+    //     const scannedUPC = result.codeResult.code;
+    //     console.log("Scanned UPC:", scannedUPC);
+
+    //     Quagga.stop();
+    //     scannerElement.style.display = 'none';
+    //     document.getElementById('loading-spinner').style.display = 'block';
+
+    //     fetch('https://api.upcitemdb.com/prod/trial/lookup', {
+    //       method: 'POST',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify({ upc: scannedUPC })
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       document.getElementById('loading-spinner').style.display = 'none';
+
+    //       if (data.items && data.items.length > 0) {
+    //         const item = data.items[0];
+    //         let color = '';
+
+    //         if (item.description) {
+    //           const colorMatch = item.description.match(/Color:\s*([a-zA-Z\/\- ]+)/i);
+    //           if (colorMatch && colorMatch[1]) {
+    //             color = colorMatch[1];
+    //           }
+    //         }
+
+    //         const scope = angular.element(document.querySelector('[data-ng-controller="addProductCtrl"]')).scope();
+    //         scope.$apply(function () {
+    //           scope.name = item.title || '';
+    //           scope.manufacturer = item.brand || '';
+    //           scope.type = item.category || '';
+    //           scope.color = color;
+    //           scope.location = '';
+    //           scope.quantity = 1;
+    //         });
+    //       } else {
+    //         alert('Product not found in UPC database.');
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.error('Error fetching product data:', error);
+    //       document.getElementById('loading-spinner').style.display = 'none';
+    //       alert('Failed to fetch product details.');
+    //     });
+    //   });
+    // };
+
+    // // Poll for mobile-scanned UPC
+    // setInterval(function () {
+    //   fetch(`${indexURL}/getLatestUPC`)
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       if (data.upc) {
+    //         console.log("New UPC received:", data.upc);
+    //         document.getElementById('name').value = data.upc;
+
+    //         fetch(`${indexURL}/scannedUPC`, {
+    //           method: 'POST',
+    //           headers: { 'Content-Type': 'application/json' },
+    //           body: JSON.stringify({ upc: null })
+    //         });
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.error('Error checking for UPC:', error);
+    //     });
+    // }, 1000);
+ 
+
+ -->

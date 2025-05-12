@@ -1,29 +1,58 @@
-
 <!DOCTYPE html>
 <html lang="en" ng-app="browseApp" ng-controller="browseCtrl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  
+
   <title>Browse Products - CreativCatalog</title>
- 
+
   <link rel="stylesheet" href="css/browse.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
   <script src="js/browse.js"></script>
 </head>
 <body>
+
+<script>
+  fetch('/session_check', { credentials: 'include' })
+    .then(res => {
+      if (res.status === 401) window.location.href = '/login.html';
+    });
+</script>
+
   <header>
     <h1>Browse Catalog</h1>
   </header>
+
   <nav>
-    <ul class="nav-buttons">
-      <li><a href="/landing.html">Home</a></li>
-      <li><a href="/add_products.html">Add Product</a></li>
-      <li><a href="/browse.html">Browse Catalog</a></li>
-      <li><a href="/wishlist.html">Wishlist</a></li>
-    </ul>
-  </nav>
+    
+  <ul class="nav-buttons">
+    <li><a href="/landing.html">Home</a></li>
+    <li><a href="/add_products.html">Add Product</a></li>
+    <li><a href="/browse.html">Browse Catalog</a></li>
+    <li><a href="/wishlist.html">Wishlist</a></li>
+    <li><a href="/projects.html">Projects</a></li>
+    <li><a href="#" id="logout-link">Log Out</a></li>
+  </ul>
+</nav>
+
+
   <main>
+    <!-- Filter Dropdown -->
+    <select id="search-category">
+      <option value="all">All</option> 
+      <option value="name">Name</option>
+      <option value="type">Type</option>
+      <option value="color">Color</option>
+      <option value="manufacturer">Manufacturer</option>
+    </select>
+    
+    
+      <input type="text" id="search-query" placeholder="Search...">
+      <button ng-click="performSearch()">Search</button><button ng-click="clearSearch()">Clear</button>
+
+
+    </div>
+    
     <table>
       <thead>
         <tr>
@@ -36,52 +65,44 @@
           <th>Actions</th>
         </tr>
       </thead>
+
       <tbody>
-        <div style="margin-bottom: 20px; text-align: center;">
-          <label for="filterType">Filter by Type:</label>
-          <select id="filterType" ng-model="selectedType" ng-change="filterByType()">
-            <option value="">-- All Types --</option>
-            <option ng-repeat="type in uniqueTypes">{{type}}</option>
-          </select>
-        </div>
-        
-        <tr ng-repeat="item in products">
-          <tr ng-repeat="item in products">
-            <td>
-              <span ng-if="editing !== item._id">{{item.name}}</span>
-              <input ng-if="editing === item._id" ng-model="updatedProduct.name" />
-            </td>
-            <td>
-              <span ng-if="editing !== item._id">{{item.manufacturer}}</span>
-              <input ng-if="editing === item._id" ng-model="updatedProduct.manufacturer" />
-            </td>
-            <td>
-              <span ng-if="editing !== item._id">{{item.type}}</span>
-              <input ng-if="editing === item._id" ng-model="updatedProduct.type" />
-            </td>
-            <td>
-              <span ng-if="editing !== item._id">{{item.color}}</span>
-              <input ng-if="editing === item._id" ng-model="updatedProduct.color" />
-            </td>
-            <td>
-              <span ng-if="editing !== item._id">{{item.location}}</span>
-              <input ng-if="editing === item._id" ng-model="updatedProduct.location" />
-            </td>
-            <td>
-              <span ng-if="editing !== item._id">{{item.quantity}}</span>
-              <input type="number" ng-if="editing === item._id" ng-model="updatedProduct.quantity" />
-            </td>
-            <td>
-              <button ng-if="editing !== item._id" ng-click="editProduct(item)">Edit</button>
-              <button ng-if="editing !== item._id" ng-click="deleteProduct(item)">Delete</button>
-              <button ng-if="editing === item._id" ng-click="saveProduct()">Save</button>
-              <button ng-if="editing === item._id" ng-click="cancelEdit()">Cancel</button>
-            </td>
-          </tr>
-          
+        <tr ng-repeat="item in filteredProducts">
+          <td>
+            <span ng-if="editing !== item._id">{{item.name}}</span>
+            <input ng-if="editing === item._id" ng-model="updatedProduct.name" />
+          </td>
+          <td>
+            <span ng-if="editing !== item._id">{{item.manufacturer}}</span>
+            <input ng-if="editing === item._id" ng-model="updatedProduct.manufacturer" />
+          </td>
+          <td>
+            <span ng-if="editing !== item._id">{{item.type}}</span>
+            <input ng-if="editing === item._id" ng-model="updatedProduct.type" />
+          </td>
+          <td>
+            <span ng-if="editing !== item._id">{{item.color}}</span>
+            <input ng-if="editing === item._id" ng-model="updatedProduct.color" />
+          </td>
+          <td>
+            <span ng-if="editing !== item._id">{{item.location}}</span>
+            <input ng-if="editing === item._id" ng-model="updatedProduct.location" />
+          </td>
+          <td>
+            <span ng-if="editing !== item._id">{{item.quantity}}</span>
+            <input type="number" ng-if="editing === item._id" ng-model="updatedProduct.quantity" />
+          </td>
+          <td>
+            <button ng-if="editing !== item._id" ng-click="editProduct(item)">Edit</button>
+            <button ng-if="editing !== item._id" ng-click="deleteProduct(item)">Delete</button>
+            <button ng-if="editing === item._id" ng-click="saveProduct()">Save</button>
+            <button ng-if="editing === item._id" ng-click="cancelEdit()">Cancel</button>
+          </td>
         </tr>
       </tbody>
     </table>
   </main>
+  <script src="/js/logout.js"></script>
+
 </body>
 </html>

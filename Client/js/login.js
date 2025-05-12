@@ -1,83 +1,87 @@
-console.log("login.js is loaded");
-
 $(document).ready(function () {
-  // Show login modal
+  // 🔹 Open modals
   $('#open-login').click(function () {
-    $('#login-modal').fadeIn();
+    $('#login-modal').show();
   });
 
-  // Show register modal
   $('#open-create-account').click(function () {
-    $('#create-account-modal').fadeIn();
+    $('#create-account-modal').show();
   });
 
-  // Close buttons (X icons)
-  $('#close-login, #close-create-account').click(function () {
-    $('.modal').fadeOut();
+  // 🔹 Close modals
+  $('#close-login').click(function () {
+    $('#login-modal').hide();
   });
 
-  // Close modal when clicking outside content
-  $('.modal').click(function (event) {
-    if (event.target === this) {
-      $(this).fadeOut();
+  $('#close-create-account').click(function () {
+    $('#create-account-modal').hide();
+  });
+
+  // 🔹 Close modal when clicking outside of it
+  $(window).on('click', function (e) {
+    if ($(e.target).is('#login-modal')) {
+      $('#login-modal').hide();
+    }
+    if ($(e.target).is('#create-account-modal')) {
+      $('#create-account-modal').hide();
     }
   });
 
-  // ✅ Handle Login Form Submit (AJAX)
-  $('#login-form').submit(function (e) {
+  // 🔹 Handle login form submission
+  $('#login-form').submit(async function (e) {
     e.preventDefault();
 
-    const email = $('#username').val();
-    const password = $('#password').val();
+    const email = $('#login-email').val();
+    const password = $('#login-password').val(); // corrected ID
 
-    $.ajax({
-      url: 'http://localhost:5000/login',
-      method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({ email, password }),
-      success: function (response) {
-        if (response.success) {
-          alert("Login successful!");
-          $('#login-modal').fadeOut();
-          window.location.href = "/landing.html";
-        } else {
-          alert("Login failed: " + response.message);
-        }
-      },
-      error: function () {
-        alert("Error connecting to server.");
+    try {
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        window.location.href = '/landing.html';
+      } else {
+        alert(data.message || 'Login failed.');
       }
-    });
+    } catch (err) {
+      alert('Error connecting to server.');
+      console.error(err);
+    }
   });
+});
+// 🔹 Handle registration form submission
+$('#register-form').submit(async function (e) {
+  e.preventDefault();
 
-  // ✅ Handle Register Form Submit (AJAX)
-  $('#register-form').submit(function (e) {
-    e.preventDefault();
+  const firstName = $('#first-name').val();
+  const lastName = $('#last-name').val();
+  const phone = $('#phone').val();
+  const email = $('#register-email').val();
+  const password = $('#new-password').val();
 
-    const userData = {
-      firstName: $('#first-name').val(),
-      lastName: $('#last-name').val(),
-      email: $('#email').val(),
-      phone: $('#phone').val(),
-      password: $('#new-password').val()
-    };
-
-    $.ajax({
-      url: 'http://localhost:5000/create-account',
+  try {
+    const res = await fetch('/register', {
       method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify(userData),
-      success: function (response) {
-        if (response.success) {
-          alert("Account created successfully!");
-          $('#create-account-modal').fadeOut();
-        } else {
-          alert("Registration failed: " + response.message);
-        }
-      },
-      error: function () {
-        alert("Error connecting to server.");
-      }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName, lastName, phone, email, password })
     });
-  });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert('Account created successfully!');
+      $('#create-account-modal').hide();
+      $('#register-form')[0].reset();
+    } else {
+      alert(data.message || 'Registration failed.');
+    }
+  } catch (err) {
+    alert('Error connecting to server.');
+    console.error(err);
+  }
 });

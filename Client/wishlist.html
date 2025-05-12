@@ -1,24 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="wishlistApp" ng-controller="wishlistCtrl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href='/Client/css/styles.css'>
-    
-    <title>Creativcatalog</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CreativCatalog - Wishlist</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/wishlist.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1>CreativCatalog</h1>
-        <nav>
-            <ul class="nav-buttons">
-                <a href="/home">Home</a>
-                <a href="/add_products">Add Product</a>
-                <a href="/browse">Browse Catalog</a>
-                <a href="/wishlist">Wishlist</a>
-            </ul>
-        </nav>
+
+  <script>
+    fetch('/get_wishlist')
+      .then(res => {
+        if (res.status === 401) window.location.href = '/login.html';
+      });
+  </script>
+    <header class="wishlist-header">
+       
+          <h1>CreativCatalog</h1>
+        </div>
+       <nav>
+        <ul class="nav-buttons">
+          <li><a href="/landing.html">Home</a></li>
+          <li><a href="/add_products.html">Add Product</a></li>
+          <li><a href="/browse.html">Browse Catalog</a></li>
+          <li><a href="/wishlist.html">Wishlist</a></li>
+          <li><a href="/projects.html">Projects</a></li>
+          <li><a href="#" id="logout-link">Log Out</a></li>
+        </ul>
+      </nav>
+
     </header>
+
+  <main>
+    <h2>Add to Wishlist</h2>
+    <form ng-submit="submitWishlist()">
+      <input type="text" ng-model="item.name" placeholder="Product Name" required>
+      <input type="text" ng-model="item.color" placeholder="Color" required>
+      <input type="text" ng-model="item.store" placeholder="Store" required>
+      <input type="number" ng-model="item.price" placeholder="Price" required>
+      <textarea ng-model="item.notes" placeholder="Comments or Notes"></textarea>
+      <input type="file" accept="image/*" onchange="angular.element(this).scope().previewImage(this)" required>
+      <div class="img-preview" ng-if="item.image">
+        <img ng-src="{{item.image}}" alt="Image Preview">
+      </div>
+      <button type="submit">Save to Wishlist</button>
+    </form>
+
+    <h2>Your Wishlist</h2>
+    <div class="card-container">
+      <div class="card" ng-repeat="w in wishlist">
+        <img ng-src="{{w.image}}" alt="{{w.name}}">
+        <h3>{{w.name}}</h3>
+        <p><strong>Color:</strong> {{w.color}}</p>
+        <p><strong>Store:</strong> {{w.store}}</p>
+        <p><strong>Price:</strong> ${{w.price}}</p>
+        <p><strong>Notes:</strong> {{w.notes}}</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/logout.js"></script>
+  <script src="/js/wishlist.js"></script>
 </body>
+</html>
+

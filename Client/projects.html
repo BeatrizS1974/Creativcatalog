@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="projectsApp" ng-controller="projectsCtrl">
+<head>
+  <meta charset="UTF-8">
+  <title>CreativCatalog - Projects</title>
+  <link rel="stylesheet" href="/css/projects.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="/js/projects.js"></script>
+</head>
+<body>
+  <header>
+    <h1>CreativCatalog</h1>
+    <nav>
+      <ul class="nav-buttons">
+  <li><a href="/landing.html">Home</a></li>
+  <li><a href="/add-products.html">Add Products</a></li>
+  <li><a href="/browse.html">Browse</a></li>
+  <li><a href="/wishlist.html">Wishlist</a></li>
+  <li><a href="#" ng-click="showNewProjectModal = true">New Project</a></li>
+  <li><a href="/logout" id="logout-btn">Logout</a></li>
+</ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="projects-gallery">
+  <div class="add-project-button-wrapper">
+    <button class="add-project-button" ng-click="showNewProjectModal = true">+ Add New Project</button>
+  </div>
+      <div class="project-thumb" ng-repeat="proj in savedProjects" ng-click="openProject(proj)">
+        <img ng-src="{{proj.images[0]}}" alt="{{proj.name}}" />
+        <h3>{{proj.name}}</h3>
+      </div>
+    </section>
+  </main>
+
+  <!-- New Project Modal -->
+  <div class="modal" ng-show="showNewProjectModal" ng-click="closeNewModal($event)">
+    <div class="modal-content" ng-click="$event.stopPropagation()">
+      <span class="close-button" ng-click="showNewProjectModal = false">&times;</span>
+      <h2>New Project</h2>
+
+      <input type="text" ng-model="project.name" placeholder="Project Name" required>
+      <textarea ng-model="project.description" placeholder="Description"></textarea>
+
+      <details>
+  <summary>Colors</summary>
+  <div ng-repeat="color in project.colors">
+    <input type="text" ng-model="project.colors[$index]">
+    <button ng-click="project.colors.splice($index, 1)">Remove</button>
+  </div>
+  <button ng-click="project.colors = project.colors || []; project.colors.push('')">Add Color</button>
+</details>
+
+      <details>
+  <summary>Links</summary>
+  <div ng-repeat="link in project.links">
+    <input type="text" ng-model="project.links[$index]">
+    <button ng-click="project.links.splice($index, 1)">Remove</button>
+  </div>
+  <button ng-click="project.links = project.links || []; project.links.push('')">Add Link</button>
+</details>
+
+      <details>
+  <summary>Items</summary>
+  <div ng-repeat="item in project.items">
+    <input type="text" ng-model="item.name" placeholder="Name">
+    <input type="text" ng-model="item.color" placeholder="Color">
+    <input type="text" ng-model="item.type" placeholder="Type">
+    <input type="text" ng-model="item.store" placeholder="Store">
+    <input type="number" ng-model="item.price" placeholder="Price">
+    <button ng-click="project.items.splice($index, 1)">Remove</button>
+  </div>
+  <button ng-click="project.items = project.items || []; project.items.push({name:'',color:'',type:'',store:'',price:null})">Add Item</button>
+</details>
+
+      <details>
+  <summary>Tags</summary>
+  <div ng-repeat="tag in project.tags">
+    <input type="text" ng-model="project.tags[$index]">
+    <button ng-click="project.tags.splice($index, 1)">Remove</button>
+  </div>
+  <button ng-click="project.tags = project.tags || []; project.tags.push('')">Add Tag</button>
+</details>
+
+      <input type="file" multiple accept="image/*" onchange="angular.element(this).scope().previewImages(this)">
+
+      <div class="modal-actions">
+        <button ng-click="submitProject()">Save</button>
+        <button ng-click="showNewProjectModal = false">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Project Modal -->
+  <div class="modal" ng-show="selectedProject" ng-click="closeModal($event)">
+    <div class="modal-content" ng-click="$event.stopPropagation()">
+      <span class="close-button" ng-click="closeProjectModal()">&times;</span>
+      <h2>Edit Project: {{selectedProject.name}}</h2>
+
+      <input type="text" ng-model="selectedProject.name" placeholder="Project Name">
+      <textarea ng-model="selectedProject.description" placeholder="Description"></textarea>
+
+      <details>
+  <summary>Colors</summary>
+  <div ng-repeat="color in selectedProject.colors">
+    <input type="text" ng-model="selectedProject.colors[$index]">
+    <button ng-click="selectedProject.colors.splice($index, 1)">Remove</button>
+  </div>
+  <button ng-click="selectedProject.colors = selectedProject.colors || []; selectedProject.colors.push('')">Add Color</button>
+</details>
+
+      <details>
+  <summary>Links</summary>
+  <div ng-repeat="link in selectedProject.links">
+    <input type="text" ng-model="selectedProject.links[$index]">
+    <button ng-click="selectedProject.links.splice($index, 1)">Remove</button>
+  </div>
+  <button ng-click="selectedProject.links = selectedProject.links || []; selectedProject.links.push('')">Add Link</button>
+</details>
+
+      <details>
+  <summary>Items</summary>
+  <div ng-repeat="item in selectedProject.items">
+    <input type="text" ng-model="item.name" placeholder="Name">
+    <input type="text" ng-model="item.color" placeholder="Color">
+    <input type="text" ng-model="item.type" placeholder="Type">
+    <input type="text" ng-model="item.store" placeholder="Store">
+    <input type="number" ng-model="item.price" placeholder="Price">
+    <button ng-click="selectedProject.items.splice($index, 1)">Remove</button>
+  </div>
+  <button ng-click="selectedProject.items = selectedProject.items || []; selectedProject.items.push({name:'',color:'',type:'',store:'',price:null})">Add Item</button>
+</details>
+
+      <details>
+  <summary>Tags</summary>
+  <div ng-repeat="tag in selectedProject.tags">
+    <input type="text" ng-model="selectedProject.tags[$index]">
+    <button ng-click="selectedProject.tags.splice($index, 1)">Remove</button>
+  </div>
+  <button ng-click="selectedProject.tags = selectedProject.tags || []; selectedProject.tags.push('')">Add Tag</button>
+</details>
+
+      <div class="modal-actions">
+        <button type="button" ng-click="saveUpdatedProject()">Save Changes</button>
+        <button type="button" ng-click="deleteProject(selectedProject._id)">Delete Project</button>
+        <button type="button" ng-click="closeProjectModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

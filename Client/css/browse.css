@@ -1,104 +1,106 @@
-
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(to right, #89f7fe, #66a6ff);
-    background-size: 400% 400%;
-    animation: gradientShift 20s ease infinite;
-    color: #333;
-  }
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 25%, #8ec5fc 50%, #6a93f7 75%, #89f7fe 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+  color: #333;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+header {
+  text-align: center;
+  padding: 20px;
+}
+
+header h1 {
+  font-family: 'Pacifico', cursive;
+  font-size: 36px;
+  color: white;
+}
+
+nav {
+  padding: 15px;
+  text-align: center;
+}
+
+nav ul.nav-buttons {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul.nav-buttons li {
+  margin: 0 15px;
+}
+
+nav ul.nav-buttons li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 6px;
   
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  
-  header {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  header h1 {
-    font-family: 'Pacifico', cursive;
-    font-size: 36px;
-    color: white;
-  }
-  
-  main {
-    max-width: 90%;
-    margin: 30px auto;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  }
-  nav {
-   
-    padding: 15px;
-    text-align: center;
-    
-  }
-  
-  .nav-buttons {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .nav-buttons li {
-    display: inline-block;
-    margin: 0 15px;
-  }
-  
-  .nav-buttons a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .nav-buttons a:hover {
-    background-color: #ffb347;
-    color: white;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 16px;
-  }
-  
-  th, td {
-    border: 1px solid #ccc;
-    padding: 12px 15px;
-    text-align: center;
-  }
-  
-  th {
-    background-color: #66a6ff;
-    color: white;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    background-color: #66a6ff;
-    color: white;
-    transition: background 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #4a90e2;
-  }
-  
+  transition: background-color 0.3s ease;
+}
+
+nav ul.nav-buttons li a:hover {
+  background-color: #4a90e2;
+  color: white;
+}
+
+main {
+  max-width: 1000px;
+  margin: 40px auto;
+  background-color: rgba(255, 255, 255, 0.96);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 12px 15px;
+  text-align: center;
+}
+
+th {
+  background-color: #66a6ff;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Button styling */
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #66a6ff;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #4a90e2;
+}

@@ -9,7 +9,7 @@ app.controller("browseCtrl", function($scope, $http) {
   $scope.updatedProduct = {};
 
   // Load all products
-  $http.get("/get_product")
+  $http.get("products", { withCredentials: true })
     .then(function(response) {
       $scope.products = response.data;
       $scope.filteredProducts = response.data;
@@ -21,15 +21,34 @@ app.controller("browseCtrl", function($scope, $http) {
       alert("Could not fetch products. Are you logged in?");
     });
 
-  // Filter by selected type
-  $scope.filterByType = function() {
-    if ($scope.selectedType === "") {
-      $scope.filteredProducts = $scope.products;
-    } else {
-      $scope.filteredProducts = $scope.products.filter(p => p.type === $scope.selectedType);
-    }
-  };
+  // ✅ Angular-based search
+  $scope.performSearch = function () {
+    const category = document.getElementById('search-category').value;
+    const query = document.getElementById('search-query').value.trim();
 
+    if (!query) {
+      $scope.filteredProducts = $scope.products;
+      return;
+    }
+
+  $http.post("/search", {
+  category,
+  query
+}, {
+  withCredentials: true
+})
+      .then(function (response) {
+        $scope.filteredProducts = response.data;
+      })
+      .catch(function (error) {
+        console.error('Search failed:', error);
+      });
+  };
+  $scope.clearSearch = function () {
+    document.getElementById('search-query').value = '';
+    $scope.filteredProducts = $scope.products;
+  };
+  
   // Edit a product
   $scope.editProduct = function(product) {
     $scope.editing = product._id;
@@ -44,16 +63,21 @@ app.controller("browseCtrl", function($scope, $http) {
 
   // Save updated product
   $scope.saveProduct = function() {
-    $http.put("/edit_product", $scope.updatedProduct)
-      .then(function(res) {
-        if (res.data.msg === "SUCCESS") {
-          alert("Product updated!");
-          location.reload();
-        } else {
-          alert("Update failed: " + res.data.msg);
-        }
-      });
-  };
+  $http.put("/update_product/" + $scope.updatedProduct._id, $scope.updatedProduct)
+    .then(function(res) {
+      if (res.data.success) {
+        alert("Product updated!");
+        location.reload();
+      } else {
+        alert("Update failed: " + res.data.message);
+      }
+    })
+    .catch(function(err) {
+      console.error("Update error:", err);
+      alert("An error occurred while updating the product.");
+    });
+};
+
 
   // Delete product
   $scope.deleteProduct = function(product) {
@@ -65,11 +89,12 @@ app.controller("browseCtrl", function($scope, $http) {
       data: { _id: product._id },
       headers: { "Content-Type": "application/json" }
     }).then(function(response) {
-      if (response.data.msg === "SUCCESS") {
-        alert("Product deleted.");
-        location.reload();
-      } else {
-        alert("Delete failed: " + response.data.msg);
+      if (response.data.success) {
+  alert("Product deleted.");
+  location.reload();
+} else {
+  alert("Delete failed: " + response.data.message);
+
       }
     });
   };

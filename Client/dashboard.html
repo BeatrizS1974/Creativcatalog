@@ -6,9 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CreativCatalog Dashboard</title>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/config.js"></script> 
+  <script src="/js/login.js"></script>    
   <link rel="stylesheet" href="css/styles.css" />
   
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
  
   
 </head>
@@ -32,8 +35,8 @@
     <h2>Login</h2>
     
     <form id="login-form">
-      <input type="email" id="username" name="username" placeholder="Email Address" autocomplete="username" required />
-      <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password" required />
+      <input type="email" id="login-email" name="email" placeholder="Email Address" required />
+      <input type="password" id="login-password" name="password" placeholder="Password" autocomplete="current-password" required />
       <button type="submit" id="login-btn">Login</button>
     </form>
     
@@ -51,10 +54,11 @@
       <input type="text" id="first-name" name="firstName" placeholder="First Name" required />
       <input type="text" id="last-name" name="lastName" placeholder="Last Name" required />
       <input type="tel" id="phone" name="phone" placeholder="Telephone Number" required />
-      <input type="email" id="email" name="email" placeholder="Email Address" autocomplete="email" required />
-      <input type="password" id="new-password" name="password" placeholder="Password" autocomplete="new-password" required />
+      <input type="email" id="register-email" name="email" placeholder="Email Address" required />
+      <input type="password" id="new-password" name="password" placeholder="Password" required />
       <button type="submit" id="create-account-btn">Create Account</button>
     </form>
+    
 
   </div>
 </div>
